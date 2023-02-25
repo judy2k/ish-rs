@@ -1,0 +1,10 @@
+[package]
+name = "ish"
+version = "0.0.1"
+authors = ["Judy2k <judy@judy.co.uk>"]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description= "Sometimes things are true-ish."
+repository = "https://github.com/judy2k/ish-rs/"
+
+[dependencies]
