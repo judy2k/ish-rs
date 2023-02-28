@@ -17,6 +17,22 @@ impl ops::Sub<Ish> for bool {
     }
 }
 
+/// A fuzzy version of a boolean value.
+///
+/// Instances of BoolIsh can be obtained from either the expression
+/// `true-ish` or `false-ish`.
+/// These expressions will either return you a fuzzy true value,
+/// or a fuzzy false value.
+/// Variants of the word "true"
+/// (such as "TRUE" or "TrUe")
+/// are considered to be true-ish.
+/// Comparing anything else to `true-ish` will return `false`.
+///
+/// Variants of the word "false"
+/// (such as "FALSE" or "FaLse")
+/// are considered to be false-ish.
+/// Comparing anything else to `false-ish` will return `false`.
+///
 #[derive(Debug, Clone)]
 pub struct BoolIsh {
     value: bool,
@@ -103,5 +119,56 @@ impl cmp::PartialEq<i64> for BoolIsh {
 impl cmp::PartialEq<isize> for BoolIsh {
     fn eq(&self, other: &isize) -> bool {
         i64_fuzzy_eq(self.value, *other as i64)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::super::ish;
+    use super::*;
+
+    #[test]
+    fn test_true_minus_ish() {
+        let trueish = true - ish;
+
+        true_assertions(trueish);
+    }
+
+    #[test]
+    fn test_true_dot_ish() {
+        let trueish = true.ish();
+
+        true_assertions(trueish);
+    }
+
+    fn true_assertions(trueish: BoolIsh) {
+        assert_eq!(trueish, "true");
+        assert_eq!(trueish, "True");
+        assert_eq!(trueish, "TRUE");
+        assert_eq!(trueish, "TRUE".to_owned());
+        assert_eq!(trueish, 1);
+
+        assert!(trueish != "false");
+        assert!(trueish != "False");
+        assert!(trueish != "FALSE");
+        assert!(trueish != "FALSE".to_owned());
+        assert!(trueish != 0);
+    }
+
+    #[test]
+    fn test_falseish() {
+        let falseish = false - ish;
+
+        assert_eq!(falseish, "false");
+        assert_eq!(falseish, "False");
+        assert_eq!(falseish, "FALSE");
+        assert_eq!(falseish, "FALSE".to_owned());
+        assert_eq!(falseish, 0);
+
+        assert!(falseish != "true");
+        assert!(falseish != "True");
+        assert!(falseish != "TRUE");
+        assert!(falseish != "TRUE".to_owned());
+        assert!(falseish != 1);
     }
 }
