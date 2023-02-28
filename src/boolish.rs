@@ -27,13 +27,14 @@ impl ops::Sub<Ish> for bool {
 /// (such as "TRUE" or "TrUe")
 /// are considered to be true-ish.
 /// Comparing anything else to `true-ish` will return `false`.
+/// Also, the number 1 is `true-ish`.
 ///
 /// Variants of the word "false"
 /// (such as "FALSE" or "FaLse")
 /// are considered to be false-ish.
 /// Comparing anything else to `false-ish` will return `false`.
-///
-#[derive(Debug, Clone)]
+/// Also, the number 0 is `false-ish`.
+#[derive(Debug, Clone, PartialEq)]
 pub struct BoolIsh {
     value: bool,
 }
@@ -42,6 +43,10 @@ impl BoolIsh {
     fn is_true_string(&self, s: &str) -> bool {
         s.to_lowercase().trim().eq("true")
     }
+
+    fn is_false_string(&self, s: &str) -> bool {
+        s.to_lowercase().trim().eq("false")
+    }
 }
 
 impl cmp::PartialEq<&str> for BoolIsh {
@@ -49,7 +54,7 @@ impl cmp::PartialEq<&str> for BoolIsh {
         if self.value {
             self.is_true_string(*other)
         } else {
-            !self.is_true_string(*other)
+            self.is_false_string(*other)
         }
     }
 }
@@ -58,8 +63,20 @@ impl cmp::PartialEq<String> for BoolIsh {
         if self.value {
             self.is_true_string(other.as_str())
         } else {
-            !self.is_true_string(other.as_str())
+            self.is_false_string(other.as_str())
         }
+    }
+}
+
+impl cmp::PartialEq<BoolIsh> for String {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        other.eq(self)
+    }
+}
+
+impl cmp::PartialEq<BoolIsh> for &str {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        other.eq(self)
     }
 }
 
@@ -147,12 +164,21 @@ mod tests {
         assert_eq!(trueish, "TRUE");
         assert_eq!(trueish, "TRUE".to_owned());
         assert_eq!(trueish, 1);
+        assert_eq!(trueish, 1i32);
+        assert_eq!(trueish, 1i64);
+        assert_eq!(trueish, 1isize);
+        assert_eq!(trueish, 1usize);
 
+        assert!(trueish != "penguin");
         assert!(trueish != "false");
         assert!(trueish != "False");
         assert!(trueish != "FALSE");
         assert!(trueish != "FALSE".to_owned());
         assert!(trueish != 0);
+        assert!(trueish != 0i32);
+        assert!(trueish != 0i64);
+        assert!(trueish != 0isize);
+        assert!(trueish != 0usize);
     }
 
     #[test]
@@ -170,5 +196,6 @@ mod tests {
         assert!(falseish != "TRUE");
         assert!(falseish != "TRUE".to_owned());
         assert!(falseish != 1);
+        assert!(falseish != "ferret");
     }
 }
