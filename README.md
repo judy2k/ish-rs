@@ -4,7 +4,7 @@ Sometimes you want to compare something to true or false,
 but you're not so much interested if it's *true* or *false*,
 so much as whether it's true-ish, or false-ish.
 
-Anyway, thanks to Rust's amazing ability to override the hyphen operator,
+Anyway, thanks to Rust's amazing ability to override the [hyphen operator](https://doc.rust-lang.org/std/ops/trait.Sub.html),
 here it is - the Ish library, ported to Rust.
 
 First you need a true-ish or a false-ish value.
