@@ -8,3 +8,4 @@ description= "Sometimes things are true-ish."
 repository = "https://github.com/judy2k/ish-rs/"
 
 [dependencies]
+lazy_static = "1.4.0"

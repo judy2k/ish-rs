@@ -1,6 +1,30 @@
+use super::{Ish, Ishable};
+use lazy_static::lazy_static;
+use std::collections::HashSet;
 use std::{cmp, ops};
 
-use super::{Ish, Ishable};
+lazy_static! {
+    static ref TRUE_STRINGS: HashSet<String> = {
+        let mut s = HashSet::new();
+        s.insert("true".to_string());
+        s.insert("yeah".to_string());
+        s.insert("yup".to_string());
+        s.insert("yes".to_string());
+        s.insert("on".to_string());
+        s
+    };
+    static ref FALSE_STRINGS: HashSet<String> = {
+        let mut s = HashSet::new();
+        s.insert("false".to_string());
+        s.insert("untrue".to_string());
+        s.insert("nope".to_string());
+        s.insert("no".to_string());
+        s.insert("off".to_string());
+        s.insert("nah".to_string());
+        s.insert("norway".to_string()); // Easter egg!
+        s
+    };
+}
 
 impl Ishable for bool {
     type Output = BoolIsh;
@@ -41,11 +65,11 @@ pub struct BoolIsh {
 
 impl BoolIsh {
     fn is_true_string(&self, s: &str) -> bool {
-        s.to_lowercase().trim().eq("true")
+        TRUE_STRINGS.contains(&s.to_lowercase())
     }
 
     fn is_false_string(&self, s: &str) -> bool {
-        s.to_lowercase().trim().eq("false")
+        FALSE_STRINGS.contains(&s.to_lowercase())
     }
 }
 

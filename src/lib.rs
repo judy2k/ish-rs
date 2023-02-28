@@ -5,17 +5,22 @@
 //!
 //! assert!(true-ish == "TRUE");
 //! assert!(true-ish == "true");
+//! assert!(true-ish == "on");
+//! assert!(true-ish == "YEAH");
 //! assert!("True" == true-ish);
 //! assert!(true-ish != "false");
 //! assert!(true-ish != "penguins!");
 //!
 //! assert!(false-ish == "FALSE");
+//! assert!(false-ish == "off");
+//! assert!(false-ish == "nope");
+//! assert!(false-ish == "no");
+//! assert!(false-ish == "Norway"); // Easter egg!
 //! assert!(false-ish == "faLSE");
-//! assert!(false-ish == "faLSE");
+//! assert!(false-ish != "nopeee");
 //! assert!(false-ish != "true");
 //! assert!(false-ish != "ferret");
 //! ```
-//!
 mod boolish;
 
 pub use self::boolish::BoolIsh;
