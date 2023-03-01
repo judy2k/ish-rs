@@ -11,6 +11,7 @@ lazy_static! {
         s.insert("yup".to_string());
         s.insert("yes".to_string());
         s.insert("on".to_string());
+        s.insert("👍".to_string());
         s
     };
     static ref FALSE_STRINGS: HashSet<String> = {
@@ -18,9 +19,10 @@ lazy_static! {
         s.insert("false".to_string());
         s.insert("untrue".to_string());
         s.insert("nope".to_string());
-        s.insert("no".to_string());
         s.insert("off".to_string());
         s.insert("nah".to_string());
+        s.insert("👎".to_string());
+        s.insert("no".to_string());
         s.insert("norway".to_string()); // Easter egg!
         s
     };
@@ -187,6 +189,8 @@ mod tests {
         assert_eq!(trueish, "True");
         assert_eq!(trueish, "TRUE");
         assert_eq!(trueish, "TRUE".to_owned());
+        assert_eq!(trueish, "👍");
+
         assert_eq!(trueish, 1);
         assert_eq!(trueish, 1i32);
         assert_eq!(trueish, 1i64);
@@ -214,6 +218,7 @@ mod tests {
         assert_eq!(falseish, "FALSE");
         assert_eq!(falseish, "FALSE".to_owned());
         assert_eq!(falseish, 0);
+        assert_eq!(falseish, "👎");
 
         assert!(falseish != "true");
         assert!(falseish != "True");
