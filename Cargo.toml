@@ -1,6 +1,6 @@
 [package]
 name = "ish"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Judy2k <judy@judy.co.uk>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
