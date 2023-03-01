@@ -55,19 +55,39 @@ impl ops::Sub<Ish> for bool {
 /// These expressions will either return you a fuzzy true value,
 /// or a fuzzy false value.
 /// Variants of the word "true"
-/// (such as "TRUE" or "TrUe")
+/// (such as "TRUE", "TrUe", "yes", "YUP", "on" and "👍")
 /// are considered to be true-ish.
-/// Comparing anything else to `true-ish` will return `false`.
 /// Also, the number 1 is `true-ish`.
+/// Comparing anything that's not recognised to `true-ish` will return `false`.
 ///
 /// Variants of the word "false"
-/// (such as "FALSE" or "FaLse")
+/// (such as "FALSE" or "FaLse", "NO", "off", "Norway" and "naw")
 /// are considered to be false-ish.
-/// Comparing anything else to `false-ish` will return `false`.
 /// Also, the number 0 is `false-ish`.
+/// Comparing anything that's not recognized to `false-ish` will return `false`.
 #[derive(Debug, Clone)]
 pub struct BoolIsh {
     value: bool,
+}
+
+impl<T, E> cmp::PartialEq<BoolIsh> for Result<T, E> {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        if other.value {
+            self.is_ok()
+        } else {
+            self.is_err()
+        }
+    }
+}
+
+impl<T> cmp::PartialEq<BoolIsh> for Option<T> {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        if other.value {
+            self.is_some()
+        } else {
+            self.is_none()
+        }
+    }
 }
 
 impl cmp::PartialEq<BoolIsh> for String {
@@ -193,10 +213,18 @@ mod tests {
         assert_eq!(trueish, "TRUE".to_owned());
         assert_eq!(trueish, "👍");
 
+        assert!(trueish == Ok::<(), ()>(()));
+        assert!(trueish == Some(()));
+
         assert_eq!(trueish, 1);
+        assert_eq!(trueish, 1i8);
+        assert_eq!(trueish, 1i16);
         assert_eq!(trueish, 1i32);
-        assert_eq!(trueish, 1i64);
         assert_eq!(trueish, 1isize);
+        assert_eq!(trueish, 1u8);
+        assert_eq!(trueish, 1u16);
+        assert_eq!(trueish, 1u32);
+        assert_eq!(trueish, 1u64);
         assert_eq!(trueish, 1usize);
 
         assert!(trueish != "penguin");
@@ -209,6 +237,9 @@ mod tests {
         assert!(trueish != 0i64);
         assert!(trueish != 0isize);
         assert!(trueish != 0usize);
+
+        assert!(trueish != Err::<(), ()>(()));
+        assert!(trueish != None::<()>);
 
         assert!("True" == trueish);
         assert!(1 == trueish);
@@ -224,6 +255,8 @@ mod tests {
         assert_eq!(falseish, "FALSE".to_owned());
         assert_eq!(falseish, 0);
         assert_eq!(falseish, "👎");
+        assert_eq!(falseish, Err::<(), ()>(()));
+        assert_eq!(falseish, None::<()>);
 
         assert!(falseish != "true");
         assert!(falseish != "True");
@@ -231,6 +264,8 @@ mod tests {
         assert!(falseish != "TRUE".to_owned());
         assert!(falseish != 1);
         assert!(falseish != "ferret");
+        assert!(falseish != Ok::<(), ()>(()));
+        assert!(falseish != Some(()));
 
         assert!("False" == falseish);
         assert!(0 == falseish);
