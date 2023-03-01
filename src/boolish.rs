@@ -12,6 +12,8 @@ lazy_static! {
         s.insert("yes".to_string());
         s.insert("on".to_string());
         s.insert("👍".to_string());
+        s.insert("yes way".to_string()); // Easter egg!
+        s.insert("go for it".to_string());
         s
     };
     static ref FALSE_STRINGS: HashSet<String> = {
@@ -21,6 +23,8 @@ lazy_static! {
         s.insert("nope".to_string());
         s.insert("off".to_string());
         s.insert("nah".to_string());
+        s.insert("naw".to_string());
+        s.insert("nut".to_string());
         s.insert("👎".to_string());
         s.insert("no".to_string());
         s.insert("no way".to_string());
@@ -66,14 +70,6 @@ pub struct BoolIsh {
     value: bool,
 }
 
-fn is_true_string(s: &str) -> bool {
-    TRUE_STRINGS.contains(&s.to_lowercase())
-}
-
-fn is_false_string(s: &str) -> bool {
-    FALSE_STRINGS.contains(&s.to_lowercase())
-}
-
 impl cmp::PartialEq<BoolIsh> for String {
     fn eq(&self, other: &BoolIsh) -> bool {
         string_fuzzy_eq(other.value, self)
@@ -88,9 +84,9 @@ impl cmp::PartialEq<BoolIsh> for &str {
 
 fn string_fuzzy_eq(value: bool, other: &str) -> bool {
     if value {
-        is_true_string(other)
+        TRUE_STRINGS.contains(&other.to_lowercase())
     } else {
-        is_false_string(other)
+        FALSE_STRINGS.contains(&other.to_lowercase())
     }
 }
 
