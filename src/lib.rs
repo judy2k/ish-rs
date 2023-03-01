@@ -1,5 +1,8 @@
 //! Ish — The fuzzy-equality library you never asked for.
 //!
+//! Sometimes things aren't quite true or false,
+//! they're more like true-ish or false-ish.
+//!
 //! ```
 //! use ish::ish;
 //!
@@ -33,6 +36,11 @@
 //! assert!(false-ish != "true");
 //! assert!(false-ish != "ferret");
 //! ```
+//!
+//! Note that ish tries to be a *little* conservative about deciding if
+//! something is `true-ish` or `false-ish`,
+//! so if a value is unrecognised as either thruth-y or false-y, then it will
+//! not match as equal to either `truth-ish` or `false-ish`.
 mod boolish;
 
 pub use self::boolish::BoolIsh;

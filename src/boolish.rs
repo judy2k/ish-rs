@@ -23,6 +23,7 @@ lazy_static! {
         s.insert("nah".to_string());
         s.insert("👎".to_string());
         s.insert("no".to_string());
+        s.insert("no way".to_string());
         s.insert("norway".to_string()); // Easter egg!
         s
     };
@@ -60,49 +61,36 @@ impl ops::Sub<Ish> for bool {
 /// are considered to be false-ish.
 /// Comparing anything else to `false-ish` will return `false`.
 /// Also, the number 0 is `false-ish`.
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub struct BoolIsh {
     value: bool,
 }
 
-impl BoolIsh {
-    fn is_true_string(&self, s: &str) -> bool {
-        TRUE_STRINGS.contains(&s.to_lowercase())
-    }
-
-    fn is_false_string(&self, s: &str) -> bool {
-        FALSE_STRINGS.contains(&s.to_lowercase())
-    }
+fn is_true_string(s: &str) -> bool {
+    TRUE_STRINGS.contains(&s.to_lowercase())
 }
 
-impl cmp::PartialEq<&str> for BoolIsh {
-    fn eq(&self, other: &&str) -> bool {
-        if self.value {
-            self.is_true_string(*other)
-        } else {
-            self.is_false_string(*other)
-        }
-    }
-}
-impl cmp::PartialEq<String> for BoolIsh {
-    fn eq(&self, other: &String) -> bool {
-        if self.value {
-            self.is_true_string(other.as_str())
-        } else {
-            self.is_false_string(other.as_str())
-        }
-    }
+fn is_false_string(s: &str) -> bool {
+    FALSE_STRINGS.contains(&s.to_lowercase())
 }
 
 impl cmp::PartialEq<BoolIsh> for String {
     fn eq(&self, other: &BoolIsh) -> bool {
-        other.eq(self)
+        string_fuzzy_eq(other.value, self)
     }
 }
 
 impl cmp::PartialEq<BoolIsh> for &str {
     fn eq(&self, other: &BoolIsh) -> bool {
-        other.eq(self)
+        string_fuzzy_eq(other.value, self)
+    }
+}
+
+fn string_fuzzy_eq(value: bool, other: &str) -> bool {
+    if value {
+        is_true_string(other)
+    } else {
+        is_false_string(other)
     }
 }
 
@@ -114,54 +102,72 @@ fn i64_fuzzy_eq(value: bool, other: i64) -> bool {
     }
 }
 
-impl cmp::PartialEq<u8> for BoolIsh {
-    fn eq(&self, other: &u8) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+impl cmp::PartialEq<BoolIsh> for i8 {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
     }
 }
-impl cmp::PartialEq<u16> for BoolIsh {
-    fn eq(&self, other: &u16) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+
+impl cmp::PartialEq<BoolIsh> for i16 {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
     }
 }
-impl cmp::PartialEq<u32> for BoolIsh {
-    fn eq(&self, other: &u32) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+
+impl cmp::PartialEq<BoolIsh> for i32 {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
     }
 }
-impl cmp::PartialEq<u64> for BoolIsh {
-    fn eq(&self, other: &u64) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+
+impl cmp::PartialEq<BoolIsh> for i64 {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
     }
 }
-impl cmp::PartialEq<usize> for BoolIsh {
-    fn eq(&self, other: &usize) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+
+impl cmp::PartialEq<BoolIsh> for isize {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
     }
 }
-impl cmp::PartialEq<i8> for BoolIsh {
-    fn eq(&self, other: &i8) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+
+impl cmp::PartialEq<BoolIsh> for u8 {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
     }
 }
-impl cmp::PartialEq<i16> for BoolIsh {
-    fn eq(&self, other: &i16) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+
+impl cmp::PartialEq<BoolIsh> for u16 {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
     }
 }
-impl cmp::PartialEq<i32> for BoolIsh {
-    fn eq(&self, other: &i32) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+
+impl cmp::PartialEq<BoolIsh> for u32 {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
     }
 }
-impl cmp::PartialEq<i64> for BoolIsh {
-    fn eq(&self, other: &i64) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+
+impl cmp::PartialEq<BoolIsh> for u64 {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
     }
 }
-impl cmp::PartialEq<isize> for BoolIsh {
-    fn eq(&self, other: &isize) -> bool {
-        i64_fuzzy_eq(self.value, *other as i64)
+
+impl cmp::PartialEq<BoolIsh> for usize {
+    fn eq(&self, other: &BoolIsh) -> bool {
+        i64_fuzzy_eq(other.value, *self as i64)
+    }
+}
+
+impl<T> cmp::PartialEq<T> for BoolIsh
+where
+    T: cmp::PartialEq<BoolIsh>,
+{
+    fn eq(&self, other: &T) -> bool {
+        other.eq(self)
     }
 }
 
@@ -207,6 +213,9 @@ mod tests {
         assert!(trueish != 0i64);
         assert!(trueish != 0isize);
         assert!(trueish != 0usize);
+
+        assert!("True" == trueish);
+        assert!(1 == trueish);
     }
 
     #[test]
@@ -226,5 +235,8 @@ mod tests {
         assert!(falseish != "TRUE".to_owned());
         assert!(falseish != 1);
         assert!(falseish != "ferret");
+
+        assert!("False" == falseish);
+        assert!(0 == falseish);
     }
 }
