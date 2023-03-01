@@ -61,6 +61,13 @@ There's more coming.
 
 You won't like it.
 
+<!--
+Super seekret to-do list:
+
+* Floating point 'ish' type for fuzzy number comparisons.
+* Blanket implementation of `Ishable` for a Vec of Ishable types?
+-->
+
 # Contributions
 
 So far, the code is all my fault.
