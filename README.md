@@ -37,10 +37,10 @@ use ish::ish;
 "Norway" == false-ish   // true! - it's an Easter egg 😈
 "👎" == false-ish       // true!
 "ferrets" == false-ish  // false!
+```
 
 `Result::Ok` & `Option::Some` values are considered to be `true-ish`,
 while `Result::Err` & `Option::None` values are considered to be `false-ish`.
-```
 
 
 ## History
