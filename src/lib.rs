@@ -42,6 +42,7 @@
 //! so if a value is unrecognised as either thruth-y or false-y, then it will
 //! not match as equal to either `truth-ish` or `false-ish`.
 mod boolish;
+mod floatish;
 
 pub use self::boolish::BoolIsh;
 
