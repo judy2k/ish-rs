@@ -1,4 +1,4 @@
-use crate::{ish, Ish, Ishable};
+use crate::{Ish, Ishable};
 use std::cmp;
 use std::ops;
 
@@ -18,7 +18,15 @@ impl ops::Sub<Ish> for f64 {
     type Output = FloatIsh;
 
     fn sub(self, _rhs: Ish) -> Self::Output {
-        FloatIsh { value: self }
+        FloatIsh { value: self as f64 }
+    }
+}
+
+impl ops::Sub<Ish> for f32 {
+    type Output = FloatIsh;
+
+    fn sub(self, _rhs: Ish) -> Self::Output {
+        FloatIsh { value: self as f64 }
     }
 }
 
@@ -39,16 +47,27 @@ where
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use super::Ishable;
+    use crate::ish;
 
     #[test]
-    fn test_floats() {
+    fn test_f64() {
         assert_eq!(0.0 - ish, -0.001);
         assert_eq!(0.0 - ish, 0.001);
         assert_eq!(1.0 - ish, 1.001);
         assert_eq!(1.0 - ish, 0.999);
         assert_eq!(-1.0 - ish, -1.001);
         assert_eq!(-1.0 - ish, -0.999);
+    }
+
+    #[test]
+    fn test_f32() {
+        assert_eq!(0.0f32 - ish, -0.001);
+        assert_eq!(0.0f32 - ish, 0.001);
+        assert_eq!(1.0f32 - ish, 1.001);
+        assert_eq!(1.0f32 - ish, 0.999);
+        assert_eq!(-1.0f32 - ish, -1.001);
+        assert_eq!(-1.0f32 - ish, -0.999);
     }
 
     #[test]
