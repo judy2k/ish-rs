@@ -18,7 +18,7 @@ impl ops::Sub<Ish> for f64 {
     type Output = FloatIsh;
 
     fn sub(self, _rhs: Ish) -> Self::Output {
-        FloatIsh { value: self as f64 }
+        FloatIsh { value: self }
     }
 }
 

@@ -138,7 +138,7 @@ impl cmp::PartialEq<BoolIsh> for i32 {
 
 impl cmp::PartialEq<BoolIsh> for i64 {
     fn eq(&self, other: &BoolIsh) -> bool {
-        i64_fuzzy_eq(other.value, *self as i64)
+        i64_fuzzy_eq(other.value, *self)
     }
 }
 
