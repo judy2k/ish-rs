@@ -32,7 +32,7 @@ impl ops::Sub<Ish> for f32 {
 
 impl cmp::PartialEq<FloatIsh> for f64 {
     fn eq(&self, other: &FloatIsh) -> bool {
-        other.value.abs() - (self).abs() <= 0.0010000000000001
+        other.value.abs() - (self).abs() <= 0.00000000001
     }
 }
 
@@ -55,10 +55,11 @@ mod test {
         assert_eq!(0.0 - ish, -0.001);
         assert_eq!(0.0 - ish, 0.001);
         assert_eq!(1.0 - ish, 1.001);
-        assert_eq!(1.0 - ish, 0.999);
-        assert_eq!(0.999, 1.0 - ish);
+        assert_eq!(1.0 - ish, 1.0 - 0.000000000001);
+
+        assert_eq!(1.0 - 0.000000000001, 1.0 - ish);
         assert_eq!(-1.0 - ish, -1.001);
-        assert_eq!(-1.0 - ish, -0.999);
+        assert_eq!(-1.0 - ish, 0.000000000001 - 1.0);
     }
 
     #[test]
@@ -66,9 +67,9 @@ mod test {
         assert_eq!(0.0f32 - ish, -0.001);
         assert_eq!(0.0f32 - ish, 0.001);
         assert_eq!(1.0f32 - ish, 1.001);
-        assert_eq!(1.0f32 - ish, 0.999);
+        assert_eq!(1.0f32 - ish, 1.0 - 0.000000000001);
         assert_eq!(-1.0f32 - ish, -1.001);
-        assert_eq!(-1.0f32 - ish, -0.999);
+        assert_eq!(-1.0f32 - ish,  0.000000000001 - 1.0);
     }
 
     #[test]
@@ -76,8 +77,8 @@ mod test {
         assert_eq!((0.0f64).ish(), -0.001);
         assert_eq!((0.0).ish(), 0.001);
         assert_eq!((1.0).ish(), 1.001);
-        assert_eq!((1.0).ish(), 0.999);
+        assert_eq!((1.0).ish(),  1.0 - 0.000000000001);
         assert_eq!((-1.0).ish(), -1.001);
-        assert_eq!((-1.0).ish(), -0.999);
+        assert_eq!((-1.0).ish(), 0.000000000001 - 1.0);
     }
 }
