@@ -1,4 +1,4 @@
-use super::{Ish, Ishable};
+use crate::{Ish, Ishable};
 use lazy_static::lazy_static;
 use std::collections::HashSet;
 use std::{cmp, ops};

@@ -60,12 +60,13 @@ pub trait Ishable {
 }
 
 #[doc(hidden)]
+#[derive(Debug)]
 pub struct Ish {
     fudge: f64,
 }
 
 impl Ish {
-    fn ish(fudge: f64) -> Self {
+    pub fn new(fudge: f64) -> Self {
         Self { fudge }
     }
 }
@@ -80,3 +81,13 @@ impl Ish {
 pub const ish: Ish = Ish {
     fudge: ISH_FUDGE_DEFAULT,
 };
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_ish_method() {
+        assert_eq!(Ish::new(0.001).fudge, 0.001);
+    }
+}

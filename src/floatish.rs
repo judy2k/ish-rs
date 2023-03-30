@@ -1,12 +1,20 @@
 use crate::ISH_FUDGE_DEFAULT;
 use crate::{Ish, Ishable};
 use std::cmp;
+use std::fmt::Debug;
 use std::ops;
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct FloatIsh {
     value: f64,
     fudge: f64,
+}
+
+impl Debug for FloatIsh {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} ±{}", self.value, self.fudge)?;
+        Ok(())
+    }
 }
 
 impl Ishable for f64 {
@@ -103,8 +111,13 @@ mod test {
 
     #[test]
     fn test_ish_function() {
-        assert_eq!(-1.0 - Ish::ish(0.001), -1.00001);
-        assert!(-1.0 - Ish::ish(0.001) != -1.1);
-        assert!(-1.0 - Ish::ish(-0.001) != -1.1);
+        assert_eq!(-1.0 - Ish::new(0.001), -1.00001);
+        assert!(-1.0 - Ish::new(0.001) != -1.1);
+        assert!(-1.0 - Ish::new(-0.001) != -1.1);
+    }
+
+    #[test]
+    fn test_floatish_debug() {
+        assert_eq!(format!("{:?}", 3.1 - Ish::new(0.0001)), "3.1 ±0.0001");
     }
 }
