@@ -1,3 +1,4 @@
+use crate::ISH_FUDGE_DEFAULT;
 use crate::{Ish, Ishable};
 use std::cmp;
 use std::ops;
@@ -5,34 +6,44 @@ use std::ops;
 #[derive(Debug, Clone)]
 pub struct FloatIsh {
     value: f64,
+    fudge: f64,
 }
 
 impl Ishable for f64 {
     type Output = FloatIsh;
     fn ish(&self) -> Self::Output {
-        FloatIsh { value: *self }
+        FloatIsh {
+            value: *self,
+            fudge: ISH_FUDGE_DEFAULT,
+        }
     }
 }
 
 impl ops::Sub<Ish> for f64 {
     type Output = FloatIsh;
 
-    fn sub(self, _rhs: Ish) -> Self::Output {
-        FloatIsh { value: self }
+    fn sub(self, rhs: Ish) -> Self::Output {
+        FloatIsh {
+            value: self,
+            fudge: rhs.fudge,
+        }
     }
 }
 
 impl ops::Sub<Ish> for f32 {
     type Output = FloatIsh;
 
-    fn sub(self, _rhs: Ish) -> Self::Output {
-        FloatIsh { value: self as f64 }
+    fn sub(self, rhs: Ish) -> Self::Output {
+        FloatIsh {
+            value: self as f64,
+            fudge: rhs.fudge,
+        }
     }
 }
 
 impl cmp::PartialEq<FloatIsh> for f64 {
     fn eq(&self, other: &FloatIsh) -> bool {
-        (other.value - self).abs() <= 0.00000000001
+        (other.value - self).abs() <= other.fudge
     }
 }
 
@@ -87,10 +98,13 @@ mod test {
         assert_eq!((-1.0).ish(), -1.0 + 0.000000000001);
 
         assert!((-1.0).ish() != -1.00001);
+        assert!((-1.0).ish() != -2.0);
     }
 
     #[test]
     fn test_ish_function() {
-        assert!(-1.0 - Ish::ish(0.001) != -1.00001);
+        assert_eq!(-1.0 - Ish::ish(0.001), -1.00001);
+        assert!(-1.0 - Ish::ish(0.001) != -1.1);
+        assert!(-1.0 - Ish::ish(-0.001) != -1.1);
     }
 }
