@@ -32,7 +32,7 @@ impl ops::Sub<Ish> for f32 {
 
 impl cmp::PartialEq<FloatIsh> for f64 {
     fn eq(&self, other: &FloatIsh) -> bool {
-        other.value.abs() - (self).abs() <= 0.00000000001
+        (other.value - self).abs() <= 0.00000000001
     }
 }
 
@@ -47,38 +47,50 @@ where
 
 #[cfg(test)]
 mod test {
-    use super::Ishable;
+    use super::{Ish, Ishable};
     use crate::ish;
 
     #[test]
     fn test_f64() {
-        assert_eq!(0.0 - ish, -0.001);
-        assert_eq!(0.0 - ish, 0.001);
-        assert_eq!(1.0 - ish, 1.001);
+        assert_eq!(0.0 - ish, 0.0);
+        assert_eq!(0.0 - ish, -0.000000000001);
+        assert_eq!(0.0 - ish, 0.000000000001);
+        assert_eq!(1.0 - ish, 1.0 + 0.000000000001);
         assert_eq!(1.0 - ish, 1.0 - 0.000000000001);
 
         assert_eq!(1.0 - 0.000000000001, 1.0 - ish);
-        assert_eq!(-1.0 - ish, -1.001);
-        assert_eq!(-1.0 - ish, 0.000000000001 - 1.0);
+        assert_eq!(-1.0 - ish, -1.0 - 0.000000000001);
+        assert_eq!(-1.0 - ish, -1.0 + 0.000000000001);
+
+        assert!(-1.0 - ish != -1.00001);
     }
 
     #[test]
     fn test_f32() {
-        assert_eq!(0.0f32 - ish, -0.001);
-        assert_eq!(0.0f32 - ish, 0.001);
-        assert_eq!(1.0f32 - ish, 1.001);
+        assert_eq!(0.0f32 - ish, -0.000000000001);
+        assert_eq!(0.0f32 - ish, 0.000000000001);
+        assert_eq!(1.0f32 - ish, 1.0 + 0.000000000001);
         assert_eq!(1.0f32 - ish, 1.0 - 0.000000000001);
-        assert_eq!(-1.0f32 - ish, -1.001);
-        assert_eq!(-1.0f32 - ish,  0.000000000001 - 1.0);
+        assert_eq!(-1.0f32 - ish, -1.0 - 0.000000000001);
+        assert_eq!(-1.0f32 - ish, -1.0 + 0.000000000001);
+
+        assert!(-1.0f32 - ish != -1.00001);
     }
 
     #[test]
     fn test_ish_method() {
-        assert_eq!((0.0f64).ish(), -0.001);
-        assert_eq!((0.0).ish(), 0.001);
-        assert_eq!((1.0).ish(), 1.001);
-        assert_eq!((1.0).ish(),  1.0 - 0.000000000001);
-        assert_eq!((-1.0).ish(), -1.001);
-        assert_eq!((-1.0).ish(), 0.000000000001 - 1.0);
+        assert_eq!((0.0f64).ish(), -0.000000000001);
+        assert_eq!((0.0).ish(), 0.000000000001);
+        assert_eq!((1.0).ish(), 1.0 + 0.000000000001);
+        assert_eq!((1.0).ish(), 1.0 - 0.000000000001);
+        assert_eq!((-1.0).ish(), -1.0 - 0.000000000001);
+        assert_eq!((-1.0).ish(), -1.0 + 0.000000000001);
+
+        assert!((-1.0).ish() != -1.00001);
+    }
+
+    #[test]
+    fn test_ish_function() {
+        assert!(-1.0 - Ish::ish(0.001) != -1.00001);
     }
 }

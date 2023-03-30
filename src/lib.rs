@@ -64,6 +64,12 @@ pub struct Ish {
     fudge: f64,
 }
 
+impl Ish {
+    fn ish(fudge: f64) -> Self {
+        Self { fudge }
+    }
+}
+
 /// ish! The whole point of this library.
 ///
 /// Subtract it from a bool and then compare the resulting object to integers and strings.
