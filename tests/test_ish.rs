@@ -1,7 +1,13 @@
 use ish::ish;
 
 #[test]
-fn basic_sanity_test() {
+fn basic_boolean_test() {
     assert_eq!(true - ish, "true");
     assert!(true - ish != "false");
+}
+
+#[test]
+fn basic_float_test() {
+    assert_eq!(0.01 - ish, 0.0100001);
+    assert!(0.01 - ish != 0.02);
 }

@@ -45,6 +45,9 @@ mod boolish;
 mod floatish;
 
 pub use self::boolish::BoolIsh;
+pub use self::floatish::FloatIsh;
+
+const ISH_FUDGE_DEFAULT: f64 = 0.0000001;
 
 /// Ishable is a trait that can be implemented to indicate that a fuzzy-match type can be obtained by a value.
 ///
@@ -57,7 +60,9 @@ pub trait Ishable {
 }
 
 #[doc(hidden)]
-pub struct Ish;
+pub struct Ish {
+    fudge: f64,
+}
 
 /// ish! The whole point of this library.
 ///
@@ -66,4 +71,6 @@ pub struct Ish;
 /// * `true-ish` is a vaguely truthy type.
 /// * `false-ish` is a vaguely falsy type.
 #[allow(non_upper_case_globals)]
-pub const ish: Ish = Ish;
+pub const ish: Ish = Ish {
+    fudge: ISH_FUDGE_DEFAULT,
+};
