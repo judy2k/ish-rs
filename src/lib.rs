@@ -2,6 +2,8 @@
 //!
 //! Sometimes things aren't quite true or false,
 //! they're more like true-ish or false-ish.
+//! And sometimes math is more of an *idea*.
+//!
 //!
 //! ```
 //! use ish::ish;
@@ -14,6 +16,13 @@
 //! assert!(true-ish == "👍");
 //! assert!(true-ish == 1);
 //! assert!("True" == true-ish); // Comparison works in both directions.
+//!
+//! // Fuzzy numbers are a thing too!
+//! assert!(1.0-ish == 1.00000001);
+//! assert!(1.0-ish != 1.0000001);
+//! assert!(1.0-ish == 0.9999999);
+//! assert!(1.0-ish != 0.999999);
+//! assert!(1.0-ish != -1.0);
 //!
 //! // The following values are not true-ish:
 //! assert!(true-ish != 0);
@@ -74,9 +83,11 @@ impl Ish {
 /// ish! The whole point of this library.
 ///
 /// Subtract it from a bool and then compare the resulting object to integers and strings.
+/// Subtract it from a numeric type to get a "fuzzy" number.
 ///
 /// * `true-ish` is a vaguely truthy type.
 /// * `false-ish` is a vaguely falsy type.
+/// * `1.0-ish` gives a value that can be compared with numeric types. (1.0-ish == 1.0±00000001)
 #[allow(non_upper_case_globals)]
 pub const ish: Ish = Ish {
     fudge: ISH_FUDGE_DEFAULT,
